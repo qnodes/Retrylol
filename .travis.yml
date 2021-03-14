@@ -1,0 +1,42 @@
+language:
+    java
+
+sudo:
+    false
+
+dist: trusty
+
+jdk:
+    - oraclejdk8
+    - oraclejdk9
+    - oraclejdk10
+    - oraclejdk11
+    - openjdk7
+    - openjdk8
+    - openjdk9
+    - openjdk10
+    - openjdk11
+    - openjdk-ea
+
+matrix:
+    allow_failures:
+        - jdk: oraclejdk9
+        - jdk: oraclejdk10
+        - jdk: oraclejdk11
+        - jdk: openjdk8
+        - jdk: openjdk9
+        - jdk: openjdk10
+        - jdk: openjdk11
+        - jdk: openjdk-ea
+
+before_script:
+  - git submodule update --remote --recursive
+
+script:
+  - cd sample-code-java
+  - mvn install -DsdkVersion=2.0.1-SNAPSHOT -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - mvn test -DsdkVersion=2.0.1-SNAPSHOT -B
+
+after_script:
+    print_surefire_reports.sh
+ 
